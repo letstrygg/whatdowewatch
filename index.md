@@ -18,17 +18,17 @@ title: What Do We Watch — Coming Soon
     </article>
   </div>
 
+  <h2>Want to Watch - TMDb Data</h2>
+  <div class="movie-list">
+    {% for movie in site.data.movies %}
+      {% include movie-card.html movie=movie %}
+    {% endfor %}
+  </div>
 
-
-
-
-<h2>Want to Watch</h2>
-<div class="movie-list">
-  {% for movie in site.data.movies %}
-    {% include movie-card.html movie=movie %}
-  {% endfor %}
-</div>
-
-
-
+  <h2>Want to Watch - OMDb Data</h2>
+  <div class="movie-list">
+    {% for movie in site.data.movies2 %}
+      {% include movie-card.html movie=movie %}
+    {% endfor %}
+  </div>
 </section>
