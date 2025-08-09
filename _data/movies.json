@@ -1,20 +1,19 @@
 [
   {
     "imdb_id": "tt17526714",
-    "tmdb_id": 933260,
     "title": "The Substance",
     "year": "2024",
-    "rating": "PG-13",
+    "rating": 7.14,
+    "votes": 4926,
+    "mpaa_rating": "N/A",
     "runtime": "2h 21m",
-    "tmdb_rating": 7.14,
-    "tmdb_votes": 4926,
     "genres": [
       "Drama",
       "Horror",
       "Science Fiction"
     ],
-    "poster_path": "/q6HjZlvyKxYmhlRhnnxeyudzK9A.jpg",
     "overview": "A fading celebrity decides to use a black market drug, a cell-replicating substance that temporarily creates a younger, better version of herself.",
+    "poster_path": "https://image.tmdb.org/t/p/w342/q6HjZlvyKxYmhlRhnnxeyudzK9A.jpg",
     "imdb_url": "https://www.imdb.com/title/tt17526714/"
   }
 ]
