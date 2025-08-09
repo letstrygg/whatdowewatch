@@ -4,7 +4,7 @@ title: What Do We Watch — Coming Soon
 ---
 
 <section class="container">
-  <h2>Welcome to whatdowewatch</h2>
+  <h2>Welcome to WhatDoWeWatch</h2>
   <p class="lead">This is a minimal starter generated for <strong>whatdowewatch.com</strong>.</p>
 
   <div class="grid">
