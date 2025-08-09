@@ -1,6 +1,6 @@
 ---
 layout: default
-title: whatdowewatch — Coming Soon
+title: WhatDoWeWatch — Coming Soon
 ---
 
 <section class="container">
