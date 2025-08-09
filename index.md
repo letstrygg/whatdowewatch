@@ -41,5 +41,13 @@ title: whatdowewatch — Coming Soon
 
 
 
+<h2>Want to Watch</h2>
+<div class="movie-list">
+  {% for movie in site.data.movies %}
+    {% include movie-card.html movie=movie %}
+  {% endfor %}
+</div>
+
+
 
 </section>
