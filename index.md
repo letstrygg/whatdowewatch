@@ -31,4 +31,4 @@ title: What Do We Watch — Coming Soon
       {% include movie-card.html movie=movie %}
     {% endfor %}
   </div>
-</section>test
+</section>
