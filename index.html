@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>What Do We Watch</title>
+    
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+</head>
+<body>
+    <h1>What Do We Watch</h1>
+    <p>Open your browser's Developer Tools (F12) and check the Console.</p>
+
+    <script>
+        // 2. Initialize Supabase (USE YOUR PUBLIC ANON KEY!)
+        const supabaseUrl = 'https://fnwmtytnltmqjaflfwyr.supabase.co';
+        const supabaseAnonKey = 'sb_publishable_y12qZF_dSbUPmV_aieiUgA_CibDsxQV';
+        
+        // The CDN attaches Supabase to the global window object
+        const supabase = window.supabase.createClient(supabaseUrl, supabaseAnonKey);
+
+        // 3. Fetch the data
+        async function fetchShows() {
+            console.log("Connecting to Supabase...");
+
+            // Let's just grab the master show records for now, ignoring the episodes
+            const { data, error } = await supabase
+                .from('items')
+                .select('*')
+                .eq('media_type', 'show'); 
+
+            if (error) {
+                console.error("Database Error:", error.message);
+                return;
+            }
+
+            console.log(`Success! Found ${data.length} show(s):`);
+            console.log(data);
+        }
+
+        fetchShows();
+    </script>
+</body>
+</html>

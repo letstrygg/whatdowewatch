@@ -1,0 +1,9 @@
+# Node Dependencies
+node_modules/
+
+# Local Data Cache
+_data/
+
+# Environment Variables (Safety catch)
+.env
+.env.local
