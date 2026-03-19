@@ -16,15 +16,15 @@
         const supabaseUrl = 'https://fnwmtytnltmqjaflfwyr.supabase.co';
         const supabaseAnonKey = 'sb_publishable_y12qZF_dSbUPmV_aieiUgA_CibDsxQV';
         
-        // The CDN attaches Supabase to the global window object
-        const supabase = window.supabase.createClient(supabaseUrl, supabaseAnonKey);
+        // Changed variable name to supabaseClient to avoid collision
+        const supabaseClient = window.supabase.createClient(supabaseUrl, supabaseAnonKey);
 
         // 3. Fetch the data
         async function fetchShows() {
             console.log("Connecting to Supabase...");
 
-            // Let's just grab the master show records for now, ignoring the episodes
-            const { data, error } = await supabase
+            // Use the new variable name here too
+            const { data, error } = await supabaseClient
                 .from('items')
                 .select('*')
                 .eq('media_type', 'show'); 
