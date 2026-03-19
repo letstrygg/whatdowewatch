@@ -1,3 +1,12 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>What Do We Watch</title>
+    
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+</head>
 <body>
     <h1>What Do We Watch</h1>
     <div id="shows-container">Loading...</div>
@@ -5,7 +14,6 @@
     <script src="js/config.js"></script>
 
     <script>
-        // 2. Reference the variables from the loaded CONFIG object
         const supabaseUrl = CONFIG.SUPABASE_URL;
         const supabaseAnonKey = CONFIG.SUPABASE_ANON_KEY;
         const supabaseClient = window.supabase.createClient(supabaseUrl, supabaseAnonKey);
@@ -23,7 +31,7 @@
                 return;
             }
 
-            if (data.length === 0) {
+            if (!data || data.length === 0) {
                 container.innerHTML = "<p>No shows found in the database.</p>";
                 return;
             }
@@ -34,8 +42,12 @@
             // Loop through the array and build the HTML
             data.forEach(show => {
                 const showElement = document.createElement('div');
+                
+                // Added a tiny safeguard in case a show doesn't have a release date yet
+                const releaseYear = show.release_date ? show.release_date.split('-')[0] : 'TBD';
+                
                 showElement.innerHTML = `
-                    <h2>${show.title} (${show.release_date.split('-')[0]})</h2>
+                    <h2>${show.title} (${releaseYear})</h2>
                     <p><strong>Status:</strong> ${show.release_status}</p>
                     <p>${show.description}</p>
                     <hr>
@@ -47,3 +59,4 @@
         fetchShows();
     </script>
 </body>
+</html>
