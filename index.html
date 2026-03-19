@@ -14,44 +14,87 @@
     <script src="js/config.js"></script>
 
     <script>
-        const supabaseUrl = CONFIG.SUPABASE_URL;
+const supabaseUrl = CONFIG.SUPABASE_URL;
         const supabaseAnonKey = CONFIG.SUPABASE_ANON_KEY;
         const supabaseClient = window.supabase.createClient(supabaseUrl, supabaseAnonKey);
 
         async function fetchShows() {
-            const { data, error } = await supabaseClient
-                .from('items')
-                .select('*')
-                .eq('media_type', 'show'); 
-
             const container = document.getElementById('shows-container');
 
-            if (error) {
-                container.innerHTML = `<p style="color: red;">Error: ${error.message}</p>`;
+            // 1. Fetch ALL items and ALL connections
+            // (Note: As your database grows to thousands of items, we will optimize this 
+            // to only fetch what we need, but for now this is the cleanest way to learn the logic).
+            const { data: items, error: itemsError } = await supabaseClient.from('items').select('*');
+            const { data: connections, error: connError } = await supabaseClient.from('item_connections').select('*');
+
+            if (itemsError || connError) {
+                container.innerHTML = `<p style="color: red;">Error loading data.</p>`;
+                console.error(itemsError || connError);
                 return;
             }
 
-            if (!data || data.length === 0) {
+            if (!items || items.length === 0) {
                 container.innerHTML = "<p>No shows found in the database.</p>";
                 return;
             }
 
-            // Clear the "Loading..." text
-            container.innerHTML = '';
+            container.innerHTML = ''; // Clear "Loading..."
 
-            // Loop through the array and build the HTML
-            data.forEach(show => {
+            // 2. Separate our items by type for easier filtering
+            const shows = items.filter(item => item.media_type === 'show');
+            const seasons = items.filter(item => item.media_type === 'season');
+            const episodes = items.filter(item => item.media_type === 'episode');
+
+            // 3. Loop through Shows -> Seasons -> Episodes
+            shows.forEach(show => {
                 const showElement = document.createElement('div');
-                
-                // Added a tiny safeguard in case a show doesn't have a release date yet
                 const releaseYear = show.release_date ? show.release_date.split('-')[0] : 'TBD';
                 
-                showElement.innerHTML = `
+                // Build the Show Header
+                let htmlContent = `
                     <h2>${show.title} (${releaseYear})</h2>
-                    <p><strong>Status:</strong> ${show.release_status}</p>
-                    <p>${show.description}</p>
-                    <hr>
+                    <p><em>${show.description}</em></p>
                 `;
+
+                // Find connections where this show is the parent
+                const seasonConnections = connections
+                    .filter(c => c.parent_id === show.id)
+                    .sort((a, b) => a.connection_order - b.connection_order); // Sort by season number
+
+                seasonConnections.forEach(sc => {
+                    // Find the actual season item using the child_id
+                    const season = seasons.find(s => s.id === sc.child_id);
+                    if (!season) return;
+
+                    htmlContent += `<h3 style="margin-left: 20px; color: #555;">${season.title}</h3>`;
+                    htmlContent += `<ul style="margin-left: 20px;">`;
+
+                    // Find connections where this season is the parent
+                    const episodeConnections = connections
+                        .filter(c => c.parent_id === season.id)
+                        .sort((a, b) => a.connection_order - b.connection_order); // Sort by episode number
+
+                    episodeConnections.forEach(ec => {
+                        // Find the actual episode item
+                        const episode = episodes.find(e => e.id === ec.child_id);
+                        if (!episode) return;
+
+                        const epDate = episode.release_date || 'Unreleased';
+                        const runtimeStr = episode.runtime ? ` - ${episode.runtime} mins` : '';
+                        
+                        htmlContent += `
+                            <li>
+                                <strong>Ep ${ec.connection_order}: ${episode.title}</strong> 
+                                <span style="color: #888; font-size: 0.9em;">(Aired: ${epDate}${runtimeStr})</span>
+                            </li>
+                        `;
+                    });
+
+                    htmlContent += `</ul>`;
+                });
+
+                htmlContent += `<hr>`;
+                showElement.innerHTML = htmlContent;
                 container.appendChild(showElement);
             });
         }
