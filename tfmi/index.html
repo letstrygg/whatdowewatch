@@ -14,7 +14,7 @@
 
     <script>
         // Connect to the local Python server you just built
-        const socket = new WebSocket("ws://67.1.151.133:8765");//ws://192.168.68.60:8765
+        const socket = new WebSocket("wss://game.a7iv.com");
 
         socket.onopen = function(e) {
             console.log("Connected to the server!");
